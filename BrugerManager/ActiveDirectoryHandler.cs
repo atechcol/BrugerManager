@@ -97,6 +97,7 @@ public class ActiveDirectoryHandler
             this.connection = new DirectoryEntry(domain);
             if (this.connection != null)
             {
+                Console.WriteLine("We connected!");
                 string[] domainSplitted = domain.Split(".");
 
                 this.connection.Path = "LDAP://OU=" + domainSplitted[0];
