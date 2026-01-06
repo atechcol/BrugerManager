@@ -2,7 +2,8 @@ using System.Security;
 
 namespace BrugerManager;
 
-// Record fordi vi gerne vil have en struktur der fungerer som en primitive.
+// Vi definerer nogle strukturer der viser, om det string-resultat vi får
+// fra ReadLine er gode eller dårlige. 
 public abstract record StringResult;
 
 public record SucceededStringResult(string Value) : StringResult;
@@ -14,7 +15,7 @@ public record FailedStringResult(Exception Why) : StringResult;
 /// </summary>
 public class UI
 {
-    private const string Prompt = ">> ";
+    private const string PromptHeader = ">> ";
     private List<string> Log { get; }
 
     private ActiveDirectoryHandler _adHandler;
@@ -55,7 +56,7 @@ public class UI
     /// <returns></returns>
     public SucceededStringResult ReadLine()
     {
-        Console.Write(UI.Prompt);
+        Console.Write(UI.PromptHeader);
 
         string? inputMaybe = Console.ReadLine();
         string input = inputMaybe switch
@@ -69,9 +70,9 @@ public class UI
         return new SucceededStringResult(input);
     }
 
-    public StringResult ReadLineForced()
+    public StringResult ReadLineNonEmpty()
     {
-        Console.Write(UI.Prompt);
+        Console.Write(UI.PromptHeader);
 
         string? inputMaybe = Console.ReadLine();
         switch (inputMaybe)
@@ -84,23 +85,29 @@ public class UI
         }
     }
 
+    public SucceededStringResult Prompt(string message)
+    {
+        Info(message);
+        return ReadLine();
+    }
+
+    public StringResult PromptNonEmpty(string message)
+    {
+        Info(message);
+        return ReadLineNonEmpty();
+    }
+
     /// <summary>
     /// UI og input til oprettelse af medarbejder
     /// </summary>
     public void CreateUser()
     {
-        Info("Fornavn:");
-        SucceededStringResult firstName = ReadLine();
-        Info("Efternavn:");
-        SucceededStringResult lastName = ReadLine();
-        Info("Beskrivelse:");
-        SucceededStringResult description = ReadLine();
-        Info("Rolle:");
-        SucceededStringResult role = ReadLine();
-        Info("Password:");
-        SucceededStringResult password = ReadLine();
-        Info("Grupper (kommasepareret):");
-        SucceededStringResult groups = ReadLine();
+        SucceededStringResult firstName = Prompt("Fornavn:");
+        SucceededStringResult lastName = Prompt("Efternavn:");
+        SucceededStringResult description = Prompt("Beskrivelse:");
+        SucceededStringResult role = Prompt("Rolle:");
+        SucceededStringResult password = Prompt("Password:");
+        SucceededStringResult groups = Prompt("Grupper (kommasepareret):");
         
         // Hvis der er mellemrum, så fjern dem, og så split på kommaer
         string[] splittedGroups = groups.Value.Replace(" ", string.Empty).Split(",");
@@ -109,7 +116,7 @@ public class UI
             firstName: firstName.Value,
             lastName: lastName.Value,
             description: description.Value,
-            role: RolesExtension.FromString(role.Value),
+            role: RoleExtension.FromString(role.Value),
             password: password.Value,
             groups: splittedGroups
         );

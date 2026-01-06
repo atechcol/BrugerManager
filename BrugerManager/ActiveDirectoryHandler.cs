@@ -19,7 +19,7 @@ public enum Role
     Unknown,
 }
 
-public static class RolesExtension
+public static class RoleExtension
 {
     /// <summary>
     /// Bruges til at finde ud af hvilke afdeling medarbejderen tilhøre ud fra rolle (Lagermedarbejder, Lagerchef, ...)
@@ -37,7 +37,7 @@ public static class RolesExtension
             Role.PurchasingManager => "Salg Group",
             Role.SysAdmin => "System Admin",
             Role.Director => "Direktør og ejer",
-            Role.Unknown => "Unknown",
+            _ => "Unknown",
         };
     }
 
@@ -115,7 +115,14 @@ public class ActiveDirectoryHandler
             return e.ToString();
         }
 
+        this.Domain = domain;
+
         return null;
+    }
+
+    public string? Connect()
+    {
+        return this.Connect(this.Domain);
     }
 
     /// <summary>
