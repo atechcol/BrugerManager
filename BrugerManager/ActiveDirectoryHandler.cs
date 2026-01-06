@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.DirectoryServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -100,7 +101,12 @@ public class ActiveDirectoryHandler
             path = "LDAP://" + domainSplitted[0] + "/";
             foreach (var dc in domainSplitted[1..])
             {
-                path += ",DC=" + dc;
+                if (dc == domainSplitted[domainSplitted.Length - 1])
+                {
+                    path += "DC=" + dc;
+                    break;
+                }
+                path += "DC=" + dc + ",";
             }
             Console.WriteLine(path);
             this.connection = new DirectoryEntry(path);
