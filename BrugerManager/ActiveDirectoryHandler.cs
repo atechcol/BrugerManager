@@ -95,21 +95,8 @@ public class ActiveDirectoryHandler
         // Forsøger at få en connection til domænet
         try
         {
-            string path = string.Empty;
-            string[] domainSplitted = domain.Split(".");
-
-            path = "LDAP://" + domainSplitted[0] + "/";
-            foreach (var dc in domainSplitted[1..])
-            {
-                if (dc == domainSplitted[domainSplitted.Length - 1])
-                {
-                    path += "DC=" + dc;
-                    break;
-                }
-                path += "DC=" + dc + ",";
-            }
-            Console.WriteLine(path);
-            this.connection = new DirectoryEntry(path);
+            Console.WriteLine(domain);
+            this.connection = new DirectoryEntry(domain);
 
             if (this.connection != null)
             {
