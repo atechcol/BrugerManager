@@ -160,7 +160,6 @@ public class ActiveDirectoryHandler
         dirUser.Properties["description"].Add(user.Description); // Beskrivelse af medarbejder
 
         dirUser.CommitChanges(); // Gemmer medarbejders oplysninger til AD
-
         dirUser.Invoke("SetPassword", user.Password); // Sætter medarbejderens password
 
         // Tilføjer oprettet medarbejder til deres tilsvarende afdeling
@@ -175,6 +174,8 @@ public class ActiveDirectoryHandler
                 dirGroup.Invoke("Add", new object[] { dirUser.Path.ToString() });
             }
         }
+
+
 
         dirUser.CommitChanges(); // Gemmer oplysninger til AD
 
