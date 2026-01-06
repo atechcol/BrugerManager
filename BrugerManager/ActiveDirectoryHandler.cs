@@ -94,18 +94,20 @@ public class ActiveDirectoryHandler
         // Forsøger at få en connection til domænet
         try
         {
-            this.connection = new DirectoryEntry(domain);
+            string path = string.Empty;
+            string[] domainSplitted = domain.Split(".");
+
+            path = "LDAP://OU=" + domainSplitted[0];
+            foreach (var dc in domainSplitted[1..])
+            {
+                path += ",DC=" + dc;
+            }
+            Console.WriteLine(path);
+            this.connection = new DirectoryEntry(path);
+
             if (this.connection != null)
             {
                 Console.WriteLine("We connected!");
-                string[] domainSplitted = domain.Split(".");
-
-                this.connection.Path = "LDAP://OU=" + domainSplitted[0];
-                foreach (var dc in domainSplitted[1..])
-                {
-                    this.connection.Path += ",DC=" + dc;
-                }
-
                 // Hvis der er forbindelse til domæne, sættes det til at bruge secure authentication type
                 this.connection.AuthenticationType = AuthenticationTypes.Secure;
             }
