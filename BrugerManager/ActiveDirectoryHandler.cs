@@ -116,9 +116,9 @@ public class ActiveDirectoryHandler
         return null;
     }
 
-    public string? Connect()
+    public string? Connect(string username, string password)
     {
-        return this.Connect(this.Domain);
+        return this.Connect(this.Domain, username, password);
     }
 
     /// <summary>
