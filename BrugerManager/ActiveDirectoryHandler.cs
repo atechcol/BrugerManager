@@ -90,13 +90,13 @@ public class ActiveDirectoryHandler
     /// </summary>
     /// <param name="domain">Navnet på domænet</param>
     /// <returns>En string med fejl besked hvis der ikke kunne oprettes forbindelse</returns>
-    public string? Connect(string domain)
+    public string? Connect(string domain, string username, string password)
     {
         // Forsøger at få en connection til domænet
         try
         {
             Console.WriteLine(domain);
-            this.connection = new DirectoryEntry(domain);
+            this.connection = new DirectoryEntry(domain, username, password);
 
             if (this.connection != null)
             {
