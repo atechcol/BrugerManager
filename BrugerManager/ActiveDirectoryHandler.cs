@@ -97,7 +97,7 @@ public class ActiveDirectoryHandler
             string path = string.Empty;
             string[] domainSplitted = domain.Split(".");
 
-            path = "LDAP://OU=" + domainSplitted[0];
+            path = "LDAP://" + domainSplitted[0] + "/";
             foreach (var dc in domainSplitted[1..])
             {
                 path += ",DC=" + dc;
